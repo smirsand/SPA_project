@@ -1,5 +1,6 @@
 import datetime
 
+import pytz
 from rest_framework.exceptions import ValidationError
 
 
@@ -41,6 +42,7 @@ class NiceHabitValidator:
     """
     Приятная привычка не может быть вознаграждена или связанной привычкой.
     """
+
     def __init__(self, enjoyable, reward, related_habit):
         self.enjoyable = enjoyable  # Признак приятной привычки
         self.reward = reward  # Вознаграждение
@@ -59,6 +61,7 @@ class TimeValidator:
     """
     Время выполнения привычки не больше 120 секунд.
     """
+
     def __init__(self, field):
         self.field = field
 
@@ -66,3 +69,19 @@ class TimeValidator:
         time = value.get(self.field)
         if time > datetime.time(minute=2):
             raise ValidationError('Время должно быть не больше 120 секунд')
+
+
+class TimeHabit:
+    """
+    Выполнение привычки не реже, чем 1 раз в 7 дней.
+    """
+
+    def __init__(self, field):
+        self.field = field
+
+    def __call__(self, value):
+        time = value.get(self.field)
+        today = datetime.datetime.today().astimezone(pytz.timezone('Europe/Moscow'))
+        time_period = datetime.timedelta(days=7)
+        if today - time > time_period:
+            raise ValidationError('Нужно выполнять привычку не реже, чем 1 раз в 7 дней.')
