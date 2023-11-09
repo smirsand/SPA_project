@@ -1,4 +1,3 @@
-from django.db.models import Q
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
@@ -30,11 +29,11 @@ class HabitListAPIView(generics.ListAPIView):
     pagination_class = HabitPaginator
     permission_classes = [IsAuthenticated, IsOwner]
 
-    def get_queryset(self):
-        user = self.request.user
-        if user.is_superuser:
-            return Habit.objects.all()
-        return Habit.objects.filter(Q(owner=self.request.user) | Q(is_public=True))
+    # def get_queryset(self):
+    #     user = self.request.user
+    #     if user.is_superuser:
+    #         return Habit.objects.all()
+    #     return Habit.objects.filter(Q(owner=self.request.user) | Q(is_public=True))
 
 
 class HabitRetrieveAPIView(generics.RetrieveAPIView):
@@ -61,3 +60,17 @@ class HabitDestroyAPIView(generics.DestroyAPIView):
     """
     queryset = Habit.objects.all()
     permission_classes = [IsAuthenticated, IsOwner]
+
+
+class ListPublicHabitAPIView(generics.ListAPIView):
+    """
+    Контроллер списка публичных привычек.
+    """
+
+    serializer_class = HabitSerializer
+    queryset = Habit.objects.all()
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(is_public=True)
