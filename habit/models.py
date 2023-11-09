@@ -9,7 +9,7 @@ class Habit(models.Model):
     Модель привычки.
     """
 
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, **NULLABLE)
     place = models.CharField(max_length=150, verbose_name='Место')
     time = models.TimeField(verbose_name='Время')
     action = models.TextField(verbose_name='Действие')
