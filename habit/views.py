@@ -5,6 +5,7 @@ from habit.models import Habit
 from habit.paginators import HabitPaginator
 from habit.permissions import IsOwner
 from habit.serializers import HabitSerializer
+from habit.tasks import habit_telegram_bot
 
 
 class HabitCreateAPIView(generics.CreateAPIView):
@@ -18,6 +19,7 @@ class HabitCreateAPIView(generics.CreateAPIView):
         new_habit = serializer.save()
         new_habit.owner = self.request.user
         new_habit.save()
+        habit_telegram_bot.delay()  # Отложенный вызов
 
 
 class HabitListAPIView(generics.ListAPIView):
@@ -28,12 +30,6 @@ class HabitListAPIView(generics.ListAPIView):
     queryset = Habit.objects.all()
     pagination_class = HabitPaginator
     permission_classes = [IsAuthenticated, IsOwner]
-
-    # def get_queryset(self):
-    #     user = self.request.user
-    #     if user.is_superuser:
-    #         return Habit.objects.all()
-    #     return Habit.objects.filter(Q(owner=self.request.user) | Q(is_public=True))
 
 
 class HabitRetrieveAPIView(generics.RetrieveAPIView):
