@@ -83,5 +83,5 @@ class TimeHabit:
         time = value.get(self.field)
         today = datetime.datetime.today().astimezone(pytz.timezone('Europe/Moscow'))
         time_period = datetime.timedelta(days=7)
-        if today - time > time_period:
+        if time - today > time_period:
             raise ValidationError('Нужно выполнять привычку не реже, чем 1 раз в 7 дней.')
