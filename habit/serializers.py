@@ -16,8 +16,8 @@ class HabitSerializer(serializers.ModelSerializer):
         validators = [ExceptionValidator(related_habit='related_habit', reward='reward'),
                       RelatedHabitsValidator(related_habit='related_habit', enjoyable='enjoyable'),
                       NiceHabitValidator(enjoyable='enjoyable', reward='reward', related_habit='related_habit'),
-                      TimeValidator(field='time'),
-                      TimeHabit(field='time_required')]
+                      TimeValidator(field='time_required'),
+                      TimeHabit(field='time')]
 
 
 class UserSerializer(serializers.ModelSerializer):
