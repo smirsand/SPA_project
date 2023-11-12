@@ -73,10 +73,7 @@ class HabitTestCase(APITestCase):
             "is_public": True
         }
 
-        res = self.client.post(
-            '/habit/create/',
-            data=data
-        )
+        self.client.post('/habit/create/', data=data)
 
         response = self.client.get('/habit/list/')
 
@@ -227,5 +224,3 @@ class HabitTestCase(APITestCase):
         )
 
         self.assertFalse(Habit.objects.all().exists())
-
-        print(res.json())
