@@ -1,8 +1,7 @@
 from rest_framework import serializers
 
-from habit.models import Habit
+from habit.models import Habit, ReminderLog
 from habit.validators import ExceptionValidator, TimeValidator, RelatedHabitsValidator, NiceHabitValidator, TimeHabit
-from users.models import User
 
 
 class HabitSerializer(serializers.ModelSerializer):
@@ -20,11 +19,11 @@ class HabitSerializer(serializers.ModelSerializer):
                       TimeHabit(field='time')]
 
 
-class UserSerializer(serializers.ModelSerializer):
+class ReminderLogSerializer(serializers.ModelSerializer):
     """
-    Сериализатор модели пользователя.
+    Сериализатор модели журнал напоминаний.
     """
 
     class Meta:
-        model = User
+        model = ReminderLog
         fields = '__all__'
