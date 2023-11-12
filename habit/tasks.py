@@ -1,15 +1,16 @@
+import os
 from datetime import timedelta
 
+import requests
+from celery import shared_task
 from django.utils import timezone
 
 from habit.models import Habit, ReminderLog
-import requests
-from celery import shared_task
 
 
 @shared_task
 def habit_telegram_bot():
-    habit_list = Habit.objects.filter(is_public=True)  # Список привычек.
+    habit_list = Habit.objects.filter(is_public=True)  # Список привычек is_public=True.
     now_time = timezone.now()  # Время на данный момент.
 
     for habit in habit_list:
@@ -23,9 +24,9 @@ def habit_telegram_bot():
 
         if now_time >= next_reminder_time:
             text = f'Я буду {habit.action} в {habit.time} в {habit.place}'
-            params = {"chat_id": 1018849724, "text": text}
+            params = {"chat_id": os.getenv('CHAT_ID'), "text": text}
             response = requests.post(
-                "https://api.telegram.org/bot6849935928:AAGv29v7CTprhQFIi6CFHoM1vJvoSA_074g/sendMessage", data=params)
+                f"https://api.telegram.org/bot{os.getenv('TOKEN_TELEGRAM_BOT')}/sendMessage", data=params)
             if response.status_code == 200:
                 print("Напоминание успешно отправлено")
             else:
