@@ -1,3 +1,5 @@
+import os
+
 from django.core.management import BaseCommand
 
 from users.models import User
@@ -9,13 +11,13 @@ class Command(BaseCommand):
     """
     def handle(self, *args, **options):
         user = User.objects.create(
-            email='smirsand@mail.ru',
-            first_name='Sergey',
-            last_name='Smirnov',
+            email=os.getenv('EMAIL_USER'),
+            first_name=os.getenv('FIRST_NAME'),
+            last_name=os.getenv('LAST_NAME'),
             is_staff=True,
             is_superuser=True,
             is_active=True
         )
 
-        user.set_password('2721896')
+        user.set_password(os.getenv('PASSWORD_USER'))
         user.save()
