@@ -9,6 +9,7 @@ class Command(BaseCommand):
     """
     Класс нового пользователя со всеми правами.
     """
+
     def handle(self, *args, **options):
         user = User.objects.create(
             email=os.getenv('EMAIL_USER'),
