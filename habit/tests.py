@@ -24,8 +24,7 @@ class HabitTestCase(APITestCase):
             'enjoyable': True,
             'frequency': 1,
             'time_required': '00:01:30',
-            'is_public': True,
-            'owner': 1
+            'is_public': True
         }
 
         response = self.client.post(
@@ -109,9 +108,7 @@ class HabitTestCase(APITestCase):
         )
 
     def test_retrieve_habit(self):
-        """
-        Тест на просмотр привычки.
-        """
+        """Тест на просмотр привычки."""
         data = {
             "place": "дома",
             "time": "2022-11-11T17:30:00+03:00",
@@ -132,24 +129,19 @@ class HabitTestCase(APITestCase):
         response = self.client.get(f'/habit/{habit_id}/')
 
         self.assertEqual(response.json(),
-                         {
-                             "id": 4,
-                             "place": "дома",
-                             "time": "2022-11-11T17:30:00+03:00",
-                             "action": "бегать",
-                             "enjoyable": True,
-                             "frequency": 1,
-                             "reward": None,
-                             "time_required": "00:01:30",
-                             "is_public": True,
-                             "owner": 4,
-                             "related_habit": None
-                         }
-                         )
+                         {"id": 4,
+                          "place": "дома",
+                          "time": "2022-11-11T17:30:00+03:00",
+                          "action": "бегать",
+                          "enjoyable": True,
+                          "frequency": 1,
+                          "reward": None,
+                          "time_required": "00:01:30",
+                          "is_public": True,
+                          "owner": 4,
+                          "related_habit": None})
 
-        self.assertTrue(
-            Habit.objects.all().exists()
-        )
+        self.assertTrue(Habit.objects.all().exists())
 
     def test_update_habit(self):
         """
