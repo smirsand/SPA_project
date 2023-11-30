@@ -1,5 +1,5 @@
 # Базовый образ Python версии 3
-FROM python:3
+FROM python:3.11
 
 # Установка рабочей директории
 WORKDIR /code
